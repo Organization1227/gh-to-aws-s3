@@ -31,8 +31,8 @@ on:
     branches:
       - main
 
-permissions:
-  id-token: write
+# permissions:
+#   id-token: write
 
 
 jobs:
@@ -72,7 +72,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-region: eu-west-1
+          aws-region: us-east-1
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
 
