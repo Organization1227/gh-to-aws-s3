@@ -13,28 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # - name: Get AWS Credentials
-      #   id: aws-credentials
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     role-to-assume: arn:aws:iam::891377218067:role/GitHubActionsRole
-      #     role-session-name: GitHubActions
-      #     external-id: ${{ secrets.OIDC_EXTERNAL_ID }}
-
       - name: Get AWS Credentials
         id: aws-credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::891377218067:role/GitHubActionsRole
+          role-to-assume: arn:aws:iam::338435713321:role/GithubActionsRole
           role-session-name: GitHubActions
-          audience: sts.amazonaws.com
-          aws-region: 'us-east-1'
-
-
+          external-id: ${{ secrets.OIDC_EXTERNAL_ID }}
 
       - name: Upload to S3
         run: |
-          aws s3 sync ./test s3://dhr123 --delete
+          aws s3 sync ./upload s3://awsrdh --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.aws-credentials.outputs.access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.aws-credentials.outputs.secret_access_key }}
