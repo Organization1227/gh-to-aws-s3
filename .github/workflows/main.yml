@@ -21,7 +21,7 @@ jobs:
           role-session-name: 'GitHubActions'
           aws-region: 'us-east-1'
           # external-id: ${{ secrets.OIDC_EXTERNAL_ID }}
-          audience: 'sts.amazonaws.com'
+          audience: 'c8abac11785ad5cb160b'
 
       - name: Upload to S3
         run: |
