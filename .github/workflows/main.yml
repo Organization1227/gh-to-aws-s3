@@ -24,19 +24,23 @@
 #           SOURCE_DIR: ./upload
 
 #############################################################
-# name: Upload to S3
+name: Upload to S3
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   upload:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+permissions:
+  id-token: write
+
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
 #       - name: Upload to S3
 #         run: |
@@ -48,22 +52,22 @@
 
 
 
-name: 'S3 Upload'
+# name: 'S3 Upload'
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-permissions:
-  id-token: write
+# permissions:
+#   id-token: write
 
-jobs:
-  s3-upload:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+# jobs:
+#   s3-upload:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
