@@ -80,7 +80,9 @@ jobs:
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
 
-      - run: aws s3 cp ./upload s3://rdhbucket12
-        shell: bash
+      # - run: aws s3 cp ./upload s3://rdhbucket12
+      #   shell: bash
 
-
+      - name: Upload to S3
+        run: |
+          aws s3 sync ./upload s3://rdhbucket12 --delete
