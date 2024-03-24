@@ -17,7 +17,7 @@ jobs:
         id: aws-credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::338435713321:role/GithubActionsRole
+          role-to-assume: arn:aws:iam::338435713321:role/GithubActionsRoleAmazon
           role-session-name: GitHubActions
           aws-region: us-east-1
           # external-id: ${{ secrets.OIDC_EXTERNAL_ID }}
