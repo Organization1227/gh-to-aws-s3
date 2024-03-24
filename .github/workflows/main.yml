@@ -19,6 +19,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::338435713321:role/GithubActionsRole
           role-session-name: GitHubActions
+          aws-region: us-east-1
           external-id: ${{ secrets.OIDC_EXTERNAL_ID }}
 
       - name: Upload to S3
