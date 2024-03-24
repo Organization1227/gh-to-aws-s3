@@ -51,7 +51,7 @@
 name: 'S3 Upload'
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
