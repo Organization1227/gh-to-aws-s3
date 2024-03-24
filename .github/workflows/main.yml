@@ -70,9 +70,9 @@ jobs:
 #         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: us-east-1
+          aws-region: 'us-east-1'
           role-to-assume: ${{ secrets.WRITE_ROLE }}
           role-session-name: OIDCSession
 
