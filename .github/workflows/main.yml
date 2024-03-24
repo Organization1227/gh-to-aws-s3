@@ -23,26 +23,56 @@
 #           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 #           SOURCE_DIR: ./upload
 
+#############################################################
+# name: Upload to S3
 
-name: Upload to S3
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   upload:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Upload to S3
+#         run: |
+#           aws s3 sync ./upload s3://rdhbucket12 --delete
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+
+
+name: 'S3 Upload'
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
+permissions:
+  id-token: write
+
 jobs:
-  upload:
+  s3-upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Upload to S3
-        run: |
-          aws s3 sync ./upload s3://rdhbucket12 --delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-1
+          role-to-assume: ${{ secrets.WRITE_ROLE }}
+          role-session-name: OIDCSession
+
+      - run: aws s3 cp ./upload s3://rdhbucket12
+        shell: bash
+
 
