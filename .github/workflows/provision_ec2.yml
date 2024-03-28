@@ -23,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::338435713321:role/CustomOIDCEC2Role
-          aws-region: us-east-2
+          aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
