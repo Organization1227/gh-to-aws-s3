@@ -1,10 +1,10 @@
-name: Deploy Lambda Function
+name: Deploy, Test, and Destroy Lambda Function
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy_test_and_destroy:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,15 +28,15 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Extract IAM Role ARN
+        id: extract_arn
         working-directory: terraform-lambda
         run: |
-          ROLE_ARN=$(terraform output -json lambda_role_arn | jq -r '.value')
-          echo "OIDC_ROLE_ARN=$ROLE_ARN" >> $GITHUB_ENV
+          echo "::set-output name=arn::$(terraform output -json lambda_role_arn | tr -d '\"')"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ env.OIDC_ROLE_ARN }}
+          role-to-assume: ${{ steps.extract_arn.outputs.arn }}
           aws-region: us-east-1
 
       - name: Terraform Plan
@@ -46,3 +46,16 @@ jobs:
       - name: Terraform Apply
         working-directory: terraform-lambda
         run: terraform apply -auto-approve tfplan
+
+      - name: Test Lambda Function
+        working-directory: terraform-lambda
+        run: |
+          npm install # Install dependencies for testing
+          npm test    # Run tests
+
+      - name: Sleep Before Destroy
+        run: sleep 10  # Wait for 10 seconds before proceeding with destroy
+
+      - name: Terraform Destroy
+        working-directory: terraform-lambda
+        run: terraform destroy -auto-approve
