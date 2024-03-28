@@ -1,5 +1,7 @@
 ## GH Actions to AWS using OIDC
 
+## Provision EC2 with OIDC Authentication
+
 For instructions on provisioning EC2 instances with OIDC authentication, please refer to the following document:
 
 - [Provision EC2 with OIDC Authentication](./docs/provisionec2oidc.md)
