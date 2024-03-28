@@ -18,7 +18,13 @@ jobs:
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
-
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: "arn:aws:iam::338435713321:role/lambda_role" 
+          aws-region: us-east-1
+          
       - name: Terraform Init
         working-directory: terraform-lambda
         run: terraform init
