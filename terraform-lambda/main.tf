@@ -3,13 +3,11 @@ provider "aws" {
 }
 
 resource "aws_lambda_function" "hello_world" {
-  # Set the necessary Lambda function configurations
-  # For example:
-  filename      = "index.js"
   function_name = "hello-world-function"
-  role          = "arn:aws:iam::338435713321:role/lambda_role" # Replace with the actual ARN of your existing IAM role
+  filename      = "index.js"
+  role          = "arn:aws:iam::338435713321:role/lambda_role"
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs14.x"  # Adjust runtime if "nodejs20.x" is not available
 }
 
 output "lambda_function_arn" {
