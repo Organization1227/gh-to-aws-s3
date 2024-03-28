@@ -3,13 +3,11 @@ provider "aws" {
 }
 
 resource "aws_lambda_function" "hello_world" {
-  filename      = "lambda.zip"
+  filename      = "index.js"
   function_name = "hello-world-function"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.handler"
   runtime       = "nodejs14.x"
-
-  source_code_hash = filebase64sha256("lambda.zip")
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -20,14 +18,9 @@ resource "aws_iam_role" "lambda_role" {
       {
         Effect    = "Allow",
         Principal = {
-          Federated = "https://token.actions.githubusercontent.com"
+          Service = "lambda.amazonaws.com"
         },
-        Action    = "sts:AssumeRoleWithWebIdentity",
-        Condition = {
-          StringEquals = {
-            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          }
-        }
+        Action    = "sts:AssumeRole"
       }
     ]
   })
