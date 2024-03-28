@@ -38,4 +38,10 @@ jobs:
           terraform validate
           terraform plan 
           terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: always()  # Ensure this step runs even if previous steps fail
+        run: |
+          cd tf-example/
+          terraform destroy -auto-approve
      
