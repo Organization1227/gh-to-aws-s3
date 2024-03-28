@@ -27,26 +27,6 @@ jobs:
         working-directory: terraform-lambda
         run: terraform apply -auto-approve
 
-      - name: Extract IAM Role ARN
-        id: extract_arn
-        working-directory: terraform-lambda
-        run: |
-          echo "::set-output name=arn::$(terraform output -json lambda_role_arn | tr -d '\"')"
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ steps.extract_arn.outputs.arn }}
-          aws-region: us-east-1
-
-      - name: Terraform Plan
-        working-directory: terraform-lambda
-        run: terraform plan -out=tfplan
-
-      - name: Terraform Apply
-        working-directory: terraform-lambda
-        run: terraform apply -auto-approve tfplan
-
       - name: Test Lambda Function
         working-directory: terraform-lambda
         run: |
