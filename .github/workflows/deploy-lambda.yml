@@ -1,0 +1,48 @@
+name: Deploy Lambda Function
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        working-directory: terraform-lambda
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: terraform-lambda
+        run: terraform apply -auto-approve
+
+      - name: Extract IAM Role ARN
+        working-directory: terraform-lambda
+        run: |
+          ROLE_ARN=$(terraform output -json lambda_role_arn | jq -r '.value')
+          echo "OIDC_ROLE_ARN=$ROLE_ARN" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.OIDC_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Terraform Plan
+        working-directory: terraform-lambda
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: terraform-lambda
+        run: terraform apply -auto-approve tfplan
