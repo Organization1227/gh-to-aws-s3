@@ -9,7 +9,7 @@ resource "aws_lambda_function" "hello_world" {
   function_name = "hello-world-function"
   role          = "arn:aws:iam::338435713321:role/lambda_role" # Replace with the actual ARN of your existing IAM role
   handler       = "index.handler"
-  runtime       = "nodejs14.x"
+  runtime       = "nodejs20.x"
 }
 
 output "lambda_function_arn" {
