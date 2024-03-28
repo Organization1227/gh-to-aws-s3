@@ -3,6 +3,10 @@ name: Deploy, Test, and Destroy Lambda Function
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy_test_and_destroy:
     runs-on: ubuntu-latest
